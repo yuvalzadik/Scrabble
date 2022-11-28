@@ -14,7 +14,7 @@ public class Tile {
         return java.util.Objects.hash(super.hashCode(), letter, score);
     }
 
-    public Tile(char letter, int score) {
+    private Tile(char letter, int score) {
         this.letter = letter;
         this.score = score;
     }
