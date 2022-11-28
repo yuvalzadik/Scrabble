@@ -27,13 +27,13 @@ public class Tile {
         private int[] letter_amount;
         public final int[] max_letter_amount;
         private Tile[] letters_and_value;
-        private char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         private int current_amount_bag =98;
         private static Bag instance = null;
         private Bag() {
         letter_amount =new int[] {9,2,2,4,12,2,3,2,9,1,1,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1};
         max_letter_amount =  letter_amount.clone() ;
         letters_and_value = new Tile[26];
+        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         for (i=0; i<26; i++){
             letters_and_value[i] = new Tile(alphabet[i] , letter_amount[i]);
         }
@@ -62,7 +62,7 @@ public class Tile {
             if (Character.isUpperCase(letter)) {
                 int location = letter - 'A';
                 if (letter_amount[location] != 0){
-                    letter_amount[location]-=1;
+                    letter_amount[location]--;
                     current_amount_bag-=1;
                     return letters_and_value[location];
                 }
