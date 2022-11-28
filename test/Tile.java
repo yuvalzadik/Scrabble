@@ -71,7 +71,7 @@ public class Tile {
             return  null;
         }
 
-        public void Put(Tile t){
+        public void put(Tile t){
             int tile_location = t.letter - 'A';
             if (current_amount_bag<98 && letter_amount[tile_location]< max_letter_amount[tile_location]){
                 letter_amount[tile_location]+=1;
