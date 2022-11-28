@@ -34,7 +34,7 @@ public class Tile {
         max_letter_amount =  letter_amount.clone() ;
         letters_and_value = new Tile[26];
         char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-        for (i=0; i<26; i++){
+        for (int i=0; i<26; i++){
             letters_and_value[i] = new Tile(alphabet[i] , letter_amount[i]);
         }
         }
