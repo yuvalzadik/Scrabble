@@ -1,5 +1,6 @@
 package test.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board {
@@ -47,19 +48,83 @@ public class Board {
         bonus[13][5]= 3; bonus[13][9]= 3;
 
     }
-
     public Tile[][] getTiles() {
         return this.tiles_board.clone();
 
     }
-
     public static Board getBoard() {
         if (b == null) {
             b = new Board();
         }
-        System.out.println(Arrays.deepToString(b.tiles_board));
-        System.out.println(Arrays.deepToString(b.bonus));
+        //System.out.println(Arrays.deepToString(b.tiles_board));
+        //System.out.println(Arrays.deepToString(b.bonus));
         return b;
 
     }
+
+    public boolean boardLegal( Word word) {
+        // check if it is the first word - one tile have to be on the star position
+        // notfirstword will be true automatic. if it is the first word will be changed to false.
+        //neartile will be false automatic. if it is the first word will be changed to true.
+        boolean notfirstword = b.tiles_board[7][7] != null;
+        boolean near_tile = false ;
+        // check if the word inside board boundaries
+        int row = word.getRow();
+        int col = word.getCol();
+        for (int i = 0; i < word.getTiles().length; i++) {
+            if (row < 0 || row > 14 || col < 0 || col > 14)
+                return false;
+            if (!notfirstword) {
+                near_tile = true ;
+                if (row == 7 && col == 7)
+                    notfirstword = true;
+            }
+            // check if the word contains or near existing tile.( just if it is not the first word)
+            else {
+            // if we want to put tile on occupied spot we have to check it is the same one
+            if (b.tiles_board[row][col]!= null){
+                if (b.tiles_board[row][col] != word.getTiles()[i])
+                    return false ;
+                else
+                    near_tile = true ;
+            }
+            //check if the new word is near existing tile
+            else {
+                if (row != 0) {
+                    if (b.tiles_board[row - 1][col] != null)
+                        near_tile = true;
+                }
+                if (row != 14) {
+                    if (b.tiles_board[row + 1][col] != null)
+                        near_tile = true;
+                }
+                if (col != 0) {
+                    if (b.tiles_board[row][col - 1] != null)
+                        near_tile = true;
+                }
+                if (col != 14) {
+                    if (b.tiles_board[row][col + 1] != null)
+                        near_tile = true;
+                }
+            }
+            }
+            if (word.isVertical())
+                row += 1;
+            else
+                col += 1;
+        }
+        // if it is the first word of the game and one of the tiles not on the star position it's not legal
+        return notfirstword && near_tile;
+    }
+    public static boolean dictionaryLegal(Word word){
+        return true;
+    }
+
+    public ArrayList<Word> getWords(Word word){
+        // the function get legal word
+        
+
+
+    }
+
 }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Word {
-    private final Tile[] tiles;
+    private Tile[] tiles;
     private int row;
     private int col;
     private boolean vertical;
