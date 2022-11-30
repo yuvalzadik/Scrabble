@@ -120,9 +120,54 @@ public class Board {
         return true;
     }
 
+    private static  int  check_boundaries_non_vertical_up (int row, int col){
+        while (row != 0) {
+            if (b.tiles_board[row -1][col] != null)
+                row-=1 ;
+        }
+        return row;
+    }
+    private static  int  check_boundaries_non_vertical_down (int row, int col){
+        while (row != 14) {
+            if (b.tiles_board[row +1][col] != null)
+                row+=1 ;
+        }
+        return row;
+
+    }
+    public Word findword(Word word){
+        if (!word.isVertical()){
+            int col_occupied_spot_right = (word.getCol() + word.getTiles().length -1) ;
+            int col_occupied_spot_left = word.getCol();
+
+            while (col_occupied_spot_left != 0) {
+                if (b.tiles_board[word.getRow()][col_occupied_spot_left-1] != null)
+                    col_occupied_spot_left-=1 ;
+            }
+            while (col_occupied_spot_right != 14) {
+                if (b.tiles_board[word.getRow()][col_occupied_spot_right +1] != null)
+                    col_occupied_spot_right+=1 ;
+            }
+            int row_occupied_spot_up;
+            int row_occupied_spot_down;
+            for (int i = word.getRow(); i< word.getTiles().length; i++) {
+                row_occupied_spot_up = check_boundaries_non_vertical_up(i, word.getCol() + i);
+                row_occupied_spot_down = check_boundaries_non_vertical_down(i, word.getCol() + i);
+
+              //  [spot_up][word get col] , [spot_down][word get col] , [spot_left][word get row] [spot_right][word get row]
+            }
+
+
+        }
+        }
     public ArrayList<Word> getWords(Word word){
-        // the function get legal word
-        
+        // the function always get legal word
+        ArrayList<Word> words = null;
+        words.add(word);
+        if (!word.isVertical()){
+
+        }
+
 
 
     }
