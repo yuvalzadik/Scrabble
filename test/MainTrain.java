@@ -1,6 +1,7 @@
 package test.test;
 
 import test.test.Tile.Bag;
+import test.test.Board;
 
 public class MainTrain {
 	
@@ -48,14 +49,14 @@ public class MainTrain {
 		}
 		return ts;
 	}
-	
-	
-	/*public static void testBoard() {
+
+
+	public static void testBoard() {
 		Board b = Board.getBoard();
 		if(b!=Board.getBoard())
 			System.out.println("board should be a Singleton (-5)");
 		
-		
+		/*
 		Bag bag = Bag.getBag();
 		Tile[] ts=new Tile[10];
 		for(int i=0;i<ts.length;i++) 
@@ -95,12 +96,12 @@ public class MainTrain {
 		if(b.tryPlaceWord(bit)!=22)
 			System.out.println("problem in placeWord for 5th word (-15)");
 		
-
-	} */
+*/
+	}
 
 	public static void main(String[] args) {
 		testBag(); // 30 points
-		//testBoard(); // 70 points
+		testBoard(); // 70 points
 		System.out.println("done");				
 	}
 
