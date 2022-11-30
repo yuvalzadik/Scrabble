@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Word {
-    private Tile[] tiles;
+    private final Tile[] tiles;
     private int row;
     private int col;
     private boolean vertical;
@@ -31,9 +31,7 @@ public class Word {
     public boolean isVertical() {
         return vertical;
     }
-
     @Override
-    // not the same
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Word word)) return false;

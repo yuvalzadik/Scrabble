@@ -1,5 +1,4 @@
 package test.test;
-
 import java.util.Objects;
 public class Tile {
     public final char letter ;
@@ -28,7 +27,8 @@ public class Tile {
         public final int[] max_letter_amount;
         private Tile[] letters_and_value;
         private int current_amount_bag =98;
-        private static Bag instance = null;
+
+        private static Bag _instance = null;
         private Bag() {
         letter_amount =new int[] {9,2,2,4,12,2,3,2,9,1,1,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1};
         max_letter_amount =  letter_amount.clone() ;
@@ -56,7 +56,6 @@ public class Tile {
                 return letters_and_value[random_number];
             }
         }
-
         public Tile getTile(char letter){
             //if (letter.matches("[A-Z]{1}"))
             if (Character.isUpperCase(letter)) {
@@ -70,7 +69,6 @@ public class Tile {
             // if the input is not valid or there is not more letters on the bag of the required one.
             return  null;
         }
-
         public void put(Tile t){
             int tile_location = t.letter - 'A';
             if (current_amount_bag<98 && letter_amount[tile_location]< max_letter_amount[tile_location]){
@@ -78,20 +76,17 @@ public class Tile {
                 current_amount_bag+=1;
             }
         }
-
         public int size() {
             return current_amount_bag;
         }
-
         public int[] getQuantities() {
-            return this.max_letter_amount;
+            return this.letter_amount.clone();
         }
         public static Bag getBag() {
-            if (instance ==null) {
-                instance = new Bag();
+            if (_instance ==null) {
+                _instance = new Bag();
             }
-            return  instance;
+            return  _instance;
         }
-
     }
 }
