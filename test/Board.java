@@ -56,10 +56,7 @@ public class Board {
         if (b == null) {
             b = new Board();
         }
-        //System.out.println(Arrays.deepToString(b.tiles_board));
-        //System.out.println(Arrays.deepToString(b.bonus));
         return b;
-
     }
 
     public boolean boardLegal( Word word) {
@@ -124,6 +121,8 @@ public class Board {
         while (row != 0) {
             if (b.tiles_board[row -1][col] != null)
                 row-=1 ;
+            else
+                return row;
         }
         return row;
     }
@@ -131,6 +130,8 @@ public class Board {
         while (row != 14) {
             if (b.tiles_board[row +1][col] != null)
                 row+=1 ;
+            else
+                return row;
         }
         return row;
 
@@ -139,6 +140,8 @@ public class Board {
         while (col != 0) {
             if (b.tiles_board[row][col -1] != null)
                 col-=1 ;
+            else
+                return col;
         }
         return col;
     }
@@ -146,6 +149,8 @@ public class Board {
         while (col != 14) {
             if (b.tiles_board[row][col +1] != null)
                 col+=1 ;
+            else
+                return col;
         }
         return col;
 
@@ -159,44 +164,52 @@ public class Board {
                     else
                         checktiles[i] = tile;
             }
-            else
-                if (b.getTiles()[first_row][first_col + i] !=null)
+            else {
+                if (b.getTiles()[first_row][first_col + i] != null)
                     checktiles[i] = b.getTiles()[first_row][first_col + i];
                 else
                     checktiles[i] = tile;
+            }
         }
         return  checktiles;
     }
     private ArrayList<Word> getWords(Word word){
         // the function always get legal word
         ArrayList<Word> words = new ArrayList<>();
-        words.add(word);
         int row = word.getRow();
         int col = word.getCol();
         int word_length = word.getTiles().length;
         if (!word.isVertical()){
+            Tile[] the_word = word.getTiles().clone();
+            int count = 0;
+            for (Tile t: the_word){
+                if (t==null)
+                    t=b.getTiles()[row][col+count];
+                count++;
+            }
             // need to check once the row of the word if it's not vertical word.
             int right_col = check_boundaries_right(row, (col +word_length - 1));
             int left_col = check_boundaries_left(row,col);
-            //Tile[] checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1),row,left_col,false);
-            Tile[] lefttiles = create_Tilearr_tocheck_word((col - left_col),row,left_col,false,null);
-            Tile[] righttiles = create_Tilearr_tocheck_word((right_col -col-word_length +1),row,col+word_length-1,false,null);
-            //Tile[] checktiles= new Tile[right_col - left_col + 1];
+            Tile[] lefttiles = create_Tilearr_tocheck_word(col -left_col,row,left_col,false,null);
+            Tile[] righttiles = create_Tilearr_tocheck_word((right_col -col -word_length +1),row,col+word_length-1,false,null);
             int lefttilesL = lefttiles.length;
-            int middleL = word.getTiles().length;
+            int middleL = the_word.length;
             int righttilesL =righttiles.length;
             int checktilesL = lefttilesL + middleL + righttilesL;
             //COMBINE THE 3 ARRAYS
-            Tile[] checktiles= new Tile[checktilesL];
-            System.arraycopy(lefttiles, 0, checktiles, 0, lefttilesL);
-            System.arraycopy(word.getTiles(), 0, checktiles, lefttilesL, middleL);
-            System.arraycopy(righttiles, 0, checktiles, lefttilesL+middleL, righttilesL);
-            Word check = new Word(checktiles, row,left_col,false );
-            if(dictionaryLegal(word) && (right_col != (col +word_length - 1) || left_col!= col ))
+            Tile[] checktiles11= new Tile[checktilesL];
+            System.arraycopy(lefttiles, 0, checktiles11, 0, lefttilesL);
+            System.arraycopy(the_word, 0, checktiles11, lefttilesL, middleL);
+            System.arraycopy(righttiles, 0, checktiles11, lefttilesL+middleL, righttilesL);
+            Word check =  new Word(checktiles11, row,left_col,false );
+            if(dictionaryLegal(word))
                 words.add( check);
+            else
+                words.add(word);
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
-                if (b.tiles_board[row][col+i]!= null){
+                Tile[] checktiles;
+                if (word.getTiles()[i]!= null){
                     int up_row = check_boundaries_up(row,col + i);
                     int down_row = check_boundaries_down(row, col +i);
                     checktiles = create_Tilearr_tocheck_word((down_row - up_row +1),up_row, col + i, true, word.getTiles()[i]);
@@ -208,27 +221,36 @@ public class Board {
         }
         else {
             // need to check once the colum of the word if it's vertical word.
+            Tile[] the_word = word.getTiles().clone();
+            int count = 0;
+            for (Tile t: the_word){
+                if (t==null)
+                    t=b.getTiles()[row+count][col];
+                count++;
+            }
             int up_row = check_boundaries_up(row,col);
             int down_row = check_boundaries_down((row + word_length -1), col);
             //Tile[] checktiles = create_Tilearr_tocheck_word((down_row - up_row +1),up_row, col, true);
             Tile[] uptiles = create_Tilearr_tocheck_word((row - up_row),up_row,col,true,null);
             Tile[] downtiles = create_Tilearr_tocheck_word((down_row -row-word_length +1),row+word_length-1,col,true,null);
-            //Tile[] checktiles= new Tile[right_col - left_col + 1];
             int uptilesL = uptiles.length;
-            int middleL = word.getTiles().length;
+            int middleL = the_word.length;
             int downtilesL =downtiles.length;
             int checktilesL = uptilesL + middleL + downtilesL;
             //COMBINE THE 3 ARRAYS
-            Tile[] checktiles= new Tile[checktilesL];
-            System.arraycopy(uptiles, 0, checktiles, 0, uptilesL);
-            System.arraycopy(word.getTiles(), 0, checktiles, uptilesL, middleL);
-            System.arraycopy(downtiles, 0, checktiles, uptilesL+middleL, downtilesL);
-            Word check =  new Word(checktiles, up_row,col,true );
-            if(dictionaryLegal(word) && (down_row != row + (word_length -1) || up_row!= row ))
+            Tile[] checktiles1= new Tile[checktilesL];
+            System.arraycopy(uptiles, 0, checktiles1, 0, uptilesL);
+            System.arraycopy(the_word, 0, checktiles1, uptilesL, middleL);
+            System.arraycopy(downtiles, 0, checktiles1, uptilesL+middleL, downtilesL);
+            Word check =  new Word(checktiles1, up_row,col,true );
+            if(dictionaryLegal(word))
                 words.add( check);
+            else
+                words.add(word);
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
-                if (b.tiles_board[row + i][col]!= null){
+                Tile[] checktiles;
+                if (word.getTiles()[i]!= null){
                     int right_col = check_boundaries_right(row +i , col);
                     int left_col = check_boundaries_left(row +i,col);
                     checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1),row +i ,right_col,false, word.getTiles()[i]);
