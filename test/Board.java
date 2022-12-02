@@ -151,17 +151,24 @@ public class Board {
         return col;
 
     }
-    private static Tile[] create_Tilearr_tocheck_word( int length, int first_row, int first_col, boolean isvertical){
+    private static Tile[] create_Tilearr_tocheck_word( int length, int first_row, int first_col, boolean isvertical, Tile tile){
         Tile[] checktiles = new Tile[length];
         for (int i = 0 ; i< length; i++){
-            if (isvertical)
-                checktiles[i] = b.getTiles()[first_row + i][first_col];
+            if (isvertical) {
+                    if (b.getTiles()[first_row + i][first_col] != null)
+                        checktiles[i] = b.getTiles()[first_row + i][first_col];
+                    else
+                        checktiles[i] = tile;
+            }
             else
-                checktiles[i] = b.getTiles()[first_row][first_col + i];
+                if (b.getTiles()[first_row][first_col + i] !=null)
+                    checktiles[i] = b.getTiles()[first_row][first_col + i];
+                else
+                    checktiles[i] = tile;
         }
         return  checktiles;
     }
-    public ArrayList<Word> getWords(Word word){
+    private ArrayList<Word> getWords(Word word){
         // the function always get legal word
         ArrayList<Word> words = new ArrayList<>();
         words.add(word);
@@ -172,20 +179,24 @@ public class Board {
             // need to check once the row of the word if it's not vertical word.
             int right_col = check_boundaries_right(row, (col +word_length - 1));
             int left_col = check_boundaries_left(row,col);
-            Tile[] checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1),row,left_col,false);
+            //Tile[] checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1),row,left_col,false);
+            Tile[] lefttiles = create_Tilearr_tocheck_word((col - left_col),row,left_col,false,null);
+            Tile[] righttiles = create_Tilearr_tocheck_word((right_col -col-word_length +1),row,col+word_length-1,false,null);
+            //Tile[] checktiles = lefttiles+word.getTiles() + righttiles;
             Word check = new Word(checktiles, row,left_col,false );
-            if(dictionaryLegal(word))
+            if(dictionaryLegal(word) && (right_col != (col +word_length - 1) || left_col!= col ))
                 words.add( check);
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
-                int up_row = check_boundaries_up(row,col + i);
-                int down_row = check_boundaries_down(row, col +i);
-                checktiles = create_Tilearr_tocheck_word((down_row - up_row +1),up_row, col + i, true);
-                check = new Word(checktiles, up_row,col+i , true );
-                if(dictionaryLegal(word))
-                    words.add( check);
+                if (b.tiles_board[row][col+i]!= null){
+                    int up_row = check_boundaries_up(row,col + i);
+                    int down_row = check_boundaries_down(row, col +i);
+                    checktiles = create_Tilearr_tocheck_word((down_row - up_row +1),up_row, col + i, true, word.getTiles()[i]);
+                    check = new Word(checktiles, up_row,col+i , true );
+                    if(dictionaryLegal(word))
+                        words.add( check);
+                }
             }
-
         }
         else {
             // need to check once the colum of the word if it's vertical word.
@@ -193,16 +204,18 @@ public class Board {
             int down_row = check_boundaries_down((row + word_length -1), col);
             Tile[] checktiles = create_Tilearr_tocheck_word((down_row - up_row +1),up_row, col, true);
             Word check =  new Word(checktiles, up_row,col,true );
-            if(dictionaryLegal(word))
+            if(dictionaryLegal(word) && (down_row != row + (word_length -1) || up_row!= row ))
                 words.add( check);
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
-                int right_col = check_boundaries_right(row +i , col);
-                int left_col = check_boundaries_left(row +i,col);
-                checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1),row +i ,right_col,false);
-                check = new Word(checktiles, row +i,right_col , false );
-                if(dictionaryLegal(word))
-                    words.add( check);
+                if (b.tiles_board[row + i][col]!= null){
+                    int right_col = check_boundaries_right(row +i , col);
+                    int left_col = check_boundaries_left(row +i,col);
+                    checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1),row +i ,right_col,false, word.getTiles()[i]);
+                    check = new Word(checktiles, row +i,right_col , false );
+                    if(dictionaryLegal(word))
+                        words.add( check);
+                }
             }
 
         }
@@ -240,7 +253,24 @@ public class Board {
         else if (!(dictionaryLegal(word)))
             return 0;
         else {
+            ArrayList<Word> Total_words = getWords(word);
             //insert word
+            int row = word.getRow();
+            int col = word.getCol();
+            Tile skiplocation;
+            for (Tile tile :word.getTiles()) {
+                if (b.tiles_board[row][col]== null)
+                    b.tiles_board[row][col] = tile;
+                else
+                    skiplocation = b.tiles_board[row][col];
+                if (word.isVertical())
+                    row +=1;
+                else
+                    col+=1;
+
+            }
+
+
 
         }
         return 0 ;
