@@ -151,7 +151,6 @@ public class Board {
         return col;
 
     }
-
     private static Tile[] create_Tilearr_tocheck_word( int length, int first_row, int first_col, boolean isvertical){
         Tile[] checktiles = new Tile[length];
         for (int i = 0 ; i< length; i++){
@@ -164,7 +163,7 @@ public class Board {
     }
     public ArrayList<Word> getWords(Word word){
         // the function always get legal word
-        ArrayList<Word> words = null;
+        ArrayList<Word> words = new ArrayList<>();
         words.add(word);
         int row = word.getRow();
         int col = word.getCol();
@@ -177,8 +176,6 @@ public class Board {
             Word check = new Word(checktiles, row,left_col,false );
             if(dictionaryLegal(word))
                 words.add( check);
-            //for (Tile tile :word.getTiles()) {
-            //}
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
                 int up_row = check_boundaries_up(row,col + i);
@@ -198,8 +195,6 @@ public class Board {
             Word check =  new Word(checktiles, up_row,col,true );
             if(dictionaryLegal(word))
                 words.add( check);
-            //for (Tile tile :word.getTiles()) {
-            //}
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
                 int right_col = check_boundaries_right(row +i , col);
@@ -210,11 +205,45 @@ public class Board {
                     words.add( check);
             }
 
-
         }
         return words;
 
+    }
+    private int getScore(Word word){
+        int row = word.getRow();
+        int col = word.getCol();
+        int score = 0;
+        int word_bonus = 0;
+        for (Tile tile :word.getTiles()) {
+            int location_bonus = b.bonus[row][col];
+            int tile_value = tile.score;
+            if (location_bonus<4)
+                tile_value = tile_value* location_bonus;
+            else
+                word_bonus+= location_bonus%10;
+            score += tile_value ;
 
+            if (word.isVertical())
+                row +=1;
+            else
+                col+=1;
+        }
+        if (word_bonus!= 0)
+            score= score * word_bonus;
+
+        return  score;
+    }
+
+    public int tryPlaceWord(Word word){
+        if (!(boardLegal(word)))
+            return 0;
+        else if (!(dictionaryLegal(word)))
+            return 0;
+        else {
+            //insert word
+
+        }
+        return 0 ;
     }
 
 }
