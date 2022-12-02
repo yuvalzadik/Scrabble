@@ -83,6 +83,7 @@ public class MainTrain {
 
 
 		Word horn=new Word(get("HORN"), 7, 5, false);
+		System.out.println(b.tryPlaceWord(horn));
 		if(b.tryPlaceWord(horn)!=14)
 			System.out.println("problem in placeWord for 1st word (-10)");
 		/*
