@@ -50,7 +50,7 @@ public class Tile {
                 // if the letter amount in this number is 0 we will scan all the letter_amount array until we find a spot
                 // that is not empty. we will find one for sure since amount bag in this stage can not be 0 .
                 while (letter_amount[random_number] == 0 )
-                    random_number += ((random_number +1) % letter_amount.length );
+                    random_number = ((random_number +1) % letter_amount.length );
                 letter_amount[random_number] -= 1;
                 current_amount_bag-=1;
                 return letters_and_value[random_number];
