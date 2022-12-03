@@ -1,7 +1,6 @@
-package test.test;
+package test;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Word {
     private Tile[] tiles;
@@ -34,7 +33,9 @@ public class Word {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Word word)) return false;
+        if (!(o instanceof Word)) return false;
+        // casting from object to word type.
+        Word word = (Word)o;
         return getRow() == word.getRow() && getCol() == word.getCol() && isVertical() == word.isVertical() && Arrays.equals(getTiles(), word.getTiles());
     }
 

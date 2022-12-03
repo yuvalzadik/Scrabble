@@ -1,4 +1,4 @@
-package test.test;
+package test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,9 +64,6 @@ public class Board {
         // notfirstword will be true automatic. if it is the first word will be changed to false.
         //neartile will be false automatic. if it is the first word will be changed to true.
         boolean notfirstword = b.tiles_board[7][7] !=null;
-        System.out.println(" not first wordt");
-        System.out.println(notfirstword);
-        System.out.println(b.tiles_board[7][7]);
         boolean near_tile = false ;
         // check if the word inside board boundaries
         int row = word.getRow();
@@ -85,13 +82,9 @@ public class Board {
             if (b.tiles_board[row][col]!= null){
                 if (word.getTiles()[i]!= null) {
                 //if (b.tiles_board[row][col] != word.getTiles()[i]) {
-                    System.out.println("problem here");
-                    System.out.println(word.getTiles()[i]);
                     return false;
                 }
                 else {
-                    System.out.println("problem solved");
-                    System.out.println(word.getTiles()[i]);
                     near_tile = true;
                 }
             }
@@ -202,11 +195,6 @@ public class Board {
             int left_col = check_boundaries_left(row,col);
             Tile[] lefttiles = create_Tilearr_tocheck_word(col -left_col,row,left_col,false,null);
             Tile[] righttiles = create_Tilearr_tocheck_word((right_col -col -word_length +1),row,col+word_length-1,false,null);
-            System.out.println("here");
-            System.out.println(Arrays.toString(lefttiles));
-            System.out.println(lefttiles.length);
-            System.out.println(Arrays.toString(righttiles));
-            System.out.println(righttiles.length);
             int lefttilesL = lefttiles.length;
             int middleL = the_word.length;
             int righttilesL =righttiles.length;
@@ -216,25 +204,15 @@ public class Board {
             System.arraycopy(lefttiles, 0, checktiles11, 0, lefttilesL);
             System.arraycopy(the_word, 0, checktiles11, lefttilesL, middleL);
             System.arraycopy(righttiles, 0, checktiles11, lefttilesL+middleL, righttilesL);
-            System.out.println("checktiles11");
+            /*System.out.println("checktiles11");
             for (Tile t: checktiles11)
                 System.out.println(t.letter);
-            System.out.println("theword");
-            for (Tile t: the_word)
-                System.out.println(t.letter);
-            System.out.println(Arrays.toString(checktiles11));
+            System.out.println("theword");*/
             Word check =  new Word(checktiles11, row,left_col,false );
-            System.out.println("yuval");
-            System.out.println(check);
             if(dictionaryLegal(word))
                 words.add( check);
             else
                 words.add(word);
-            for (Word t: words) {
-                System.out.println("jgijfkfg");
-                for (Tile tile: t.getTiles())
-                    System.out.println(tile.letter);
-            }
             //check boundaries for each tile
             for (int i=0 ; i < word_length; i++){
                 Tile[] checktiles;
@@ -285,8 +263,8 @@ public class Board {
                     int right_col = check_boundaries_right(row +i , col);
                     int left_col = check_boundaries_left(row +i,col);
                     if(right_col!= left_col) {
-                        checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1), row + i, right_col, false, word.getTiles()[i]);
-                        check = new Word(checktiles, row + i, right_col, false);
+                        checktiles = create_Tilearr_tocheck_word((right_col - left_col + 1), row + i, left_col, false, word.getTiles()[i]);
+                        check = new Word(checktiles, row + i, left_col, false);
                         if (dictionaryLegal(word))
                             words.add(check);
                     }
@@ -300,29 +278,15 @@ public class Board {
         int col = word.getCol();
         int score = 0;
         int word_bonus = 0;
-        System.out.println("get_score");
-        System.out.println(row +"," + col);
         for (Tile tile :word.getTiles()) {
-            System.out.println("current tile");
-            System.out.println(tile.letter);
-            System.out.println("current row col");
-            System.out.println(row +"," + col);
             int location_bonus = b.bonus[row][col];
             int tile_value = tile.score;
-            System.out.println("location bonus");
-            System.out.println(location_bonus);
-            System.out.println("tile_value");
-            System.out.println(tile_value);
             if (location_bonus<4) {
                 tile_value = tile_value * location_bonus;
-                System.out.println("new tile_value");
-                System.out.println(tile_value);
             }
             else
                 word_bonus+= location_bonus%10;
-            System.out.println("current score");
             score += tile_value ;
-            System.out.println(score);
             if (word.isVertical())
                 row +=1;
             else
@@ -336,28 +300,21 @@ public class Board {
 
     public int tryPlaceWord(Word word){
         if (!(boardLegal(word))) {
-            System.out.println("boardLegal");
             return 0;
         }
         else if (!(dictionaryLegal(word))) {
-            System.out.println("dictionaryLegal");
             return 0;
         }
         else {
-            System.out.println("the word legal");
             boolean firstword = b.tiles_board[7][7] ==null;
-            System.out.println(" blalalalala");
-            System.out.println(firstword);
-            System.out.println(b.tiles_board[7][7]);
             ArrayList<Word> Total_words = getWords(word);
-            System.out.println(Total_words);
-            int count = 0;
+            /*int count = 0;
             for (Word word1: Total_words){
                 System.out.println(word1);
                 count++;
             }
             System.out.println("words count");
-            System.out.println(count);
+            System.out.println(count);*/
             //insert word
             int row = word.getRow();
             int col = word.getCol();
@@ -374,11 +331,8 @@ public class Board {
             for (Word w :Total_words) {
                 Total_score +=getScore(w);
             }
-            System.out.println(firstword);
-            if (firstword) {
-                System.out.println("double score for first word");
+            if (firstword)
                 return (Total_score * 2);
-            }
             else
                 return Total_score;
         }

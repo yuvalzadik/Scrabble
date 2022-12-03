@@ -1,11 +1,8 @@
-package test.test;
+package test;
 
-import test.test.Tile.Bag;
-import test.test.Board;
+import test.Tile.Bag;
 
-import java.util.Arrays;
-
-public class MainTrain {
+public class MainTrain_original {
 	
 	public static void testBag() {
 		Bag b= Tile.Bag.getBag();
