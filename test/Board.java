@@ -63,9 +63,10 @@ public class Board {
         // check if it is the first word - one tile have to be on the star position
         // notfirstword will be true automatic. if it is the first word will be changed to false.
         //neartile will be false automatic. if it is the first word will be changed to true.
-        boolean notfirstword = b.tiles_board[7][7].letter != '\0';
+        boolean notfirstword = b.tiles_board[7][7] !=null;
         System.out.println(" not first wordt");
         System.out.println(notfirstword);
+        System.out.println(b.tiles_board[7][7]);
         boolean near_tile = false ;
         // check if the word inside board boundaries
         int row = word.getRow();
@@ -82,10 +83,17 @@ public class Board {
             else {
             // if we want to put tile on occupied spot we have to check it is the same one
             if (b.tiles_board[row][col]!= null){
-                if (b.tiles_board[row][col] != word.getTiles()[i])
-                    return false ;
-                else
-                    near_tile = true ;
+                if (word.getTiles()[i]!= null) {
+                //if (b.tiles_board[row][col] != word.getTiles()[i]) {
+                    System.out.println("problem here");
+                    System.out.println(word.getTiles()[i]);
+                    return false;
+                }
+                else {
+                    System.out.println("problem solved");
+                    System.out.println(word.getTiles()[i]);
+                    near_tile = true;
+                }
             }
             //check if the new word is near existing tile
             else {
@@ -337,6 +345,10 @@ public class Board {
         }
         else {
             System.out.println("the word legal");
+            boolean firstword = b.tiles_board[7][7] ==null;
+            System.out.println(" blalalalala");
+            System.out.println(firstword);
+            System.out.println(b.tiles_board[7][7]);
             ArrayList<Word> Total_words = getWords(word);
             System.out.println(Total_words);
             int count = 0;
@@ -344,9 +356,6 @@ public class Board {
                 System.out.println(word1);
                 count++;
             }
-            System.out.println("words count");
-            System.out.println(count);
-            boolean firstword = b.tiles_board[7][7] != null;
             System.out.println("words count");
             System.out.println(count);
             //insert word
@@ -366,8 +375,10 @@ public class Board {
                 Total_score +=getScore(w);
             }
             System.out.println(firstword);
-            if (firstword)
-                return (Total_score*2) ;
+            if (firstword) {
+                System.out.println("double score for first word");
+                return (Total_score * 2);
+            }
             else
                 return Total_score;
         }

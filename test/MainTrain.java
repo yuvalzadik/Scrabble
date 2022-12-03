@@ -83,10 +83,9 @@ public class MainTrain {
 
 
 		Word horn=new Word(get("HORN"), 7, 5, false);
-		System.out.println(b.tryPlaceWord(horn));
 		if(b.tryPlaceWord(horn)!=14)
 			System.out.println("problem in placeWord for 1st word (-10)");
-		/*
+		System.out.println("second word");
 		Word farm=new Word(get("FA_M"), 5, 7, true);
 		if(b.tryPlaceWord(farm)!=9)
 			System.out.println("problem in placeWord for 2ed word (-10)");
@@ -104,7 +103,7 @@ public class MainTrain {
 			System.out.println("problem in placeWord for 5th word (-15)");
 		
 
-	*/}
+	}
 
 	public static void main(String[] args) {
 		testBag(); // 30 points
