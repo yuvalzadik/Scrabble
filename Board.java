@@ -2,12 +2,10 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 public class Board {
     private static Board b = null;
     public Tile[][] tiles_board;
     private int[][] bonus;
-
     //public Object[][] Board_matrix;
     private Board() {
         this.tiles_board = new Tile[15][15];
