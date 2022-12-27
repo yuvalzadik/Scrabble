@@ -1,6 +1,6 @@
 package test;
 
 
-public class LFU {
+public class LFU implements CacheReplacementPolicy {
 
 }
